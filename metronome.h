@@ -19,8 +19,8 @@ private:
 
 
 public:
-Metronome(Adafruit_SSD1306 display);
-void MetronomeInit();
+Metronome();
+void MetronomeInit(Adafruit_SSD1306 display);
 void UpdateMetronome();
 void MetronomeUp();
 void MetronomeDown();

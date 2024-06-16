@@ -16,11 +16,7 @@
 class Menu{
   private:
   Adafruit_SSD1306 display;
-  void item1Action();
-  void item2Action();
-  void item3Action();
-  void item4Action();
-  static void test();
+  void DebugData();
 
   public:
 Menu();

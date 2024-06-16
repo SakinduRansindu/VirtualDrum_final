@@ -9,8 +9,8 @@ unsigned long debounceDelay = 50;    // the debounce time; increase if the outpu
 
 
 
-const char* menuItems[] = {"Metronome", "Battery", "Reset", "Exit"};
-const int menuLength = sizeof(menuItems) / sizeof(menuItems[0]);
+// const char* menuItems[] = {"Metronome", "Battery", "Reset", "Exit"};
+const int menuLength = 4;
 
 typedef struct MenuItem{
   char* menuItem;
@@ -70,12 +70,10 @@ void Menu::MenuInit(Adafruit_SSD1306 *d) {
 void Menu::MenuSetItem(char* displayName , void (*callback)(void) , int index){
   if(index==-1){
     index = mlen;
+    mlen++;
   }
   mi[index].menuItem = displayName;
   mi[index].callback = callback;
-    if(index==-1){
-    mlen++;
-  }
 }
 
 // void loop() {
@@ -118,7 +116,7 @@ void Menu::UpdateMenu(){
       display.setTextColor(SSD1306_WHITE, SSD1306_BLACK);
     }
     display.setCursor(0, i * lineHeight);
-    display.println(menuItems[i]);
+    display.println(mi[i].menuItem);
   }
   display.display();
 }
@@ -137,7 +135,16 @@ void Menu::MenuDown(){
     Serial.println(selectedMenuIndex);
 }
 
+void Menu::DebugData(){
+  Serial.print("selected index:");
+  Serial.println(selectedMenuIndex);
+  Serial.print("mlen:");
+  Serial.println(mlen);
+
+}
+
 void Menu::MenuSelect(){
+      DebugData();
       Serial.print("Selected: ");
       Serial.println(mi[selectedMenuIndex].menuItem);
       mi[selectedMenuIndex].callback();

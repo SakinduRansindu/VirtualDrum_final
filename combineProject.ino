@@ -9,20 +9,22 @@
 #define ACTIVATION_PIN 33
 #define ADC_RESOLUTION 12
 
- void item1Action();
- void item2Action();
- void item3Action();
- void item4Action();
+ static void item1Action();
+ static void item2Action();
+  void item3Action();
+ static void item4Action();
  
 String command;
 Battery batt = Battery(3300, 4200, SENSE_PIN, ADC_RESOLUTION);
 Menu menu = Menu();
-Adafruit_SSD1306 display;
+Metronome metronome = Metronome();
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+
 
 void setup() {
 
   Serial.begin(115200);
-  Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+  
   display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS);
 
 
@@ -36,11 +38,11 @@ void setup() {
   batt.begin(5000, 1, &asigmoidal);
 
   menu.MenuInit(&display);
-  menu.MenuSetItem("test", &test);
   menu.MenuSetItem("Metronome",&item1Action);
   menu.MenuSetItem("Battery",&item2Action);
   menu.MenuSetItem("Reset",&item3Action);
   menu.MenuSetItem("Exit",&item4Action);
+
 }
 
 void loop(){

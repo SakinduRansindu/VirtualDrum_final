@@ -89,12 +89,12 @@ const unsigned char zmaj [] PROGMEM = {
   0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 };
 
-Metronome::Metronome(Adafruit_SSD1306 display){
-  display = display;
+Metronome::Metronome(){
+ 
 }
 
-void Metronome::MetronomeInit() {
-  
+void Metronome::MetronomeInit(Adafruit_SSD1306 display) {
+   display = display;
 // Serial.begin(9600);
   // use a for loop to initialize each pin as an output:
   // display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS);
