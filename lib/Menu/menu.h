@@ -16,15 +16,17 @@
 class Menu{
   private:
   Adafruit_SSD1306 display;
-  void DebugData();
+  static void DebugData();
 
   public:
 Menu();
 void MenuInit(Adafruit_SSD1306 *display);  
-void MenuUp();
-void MenuDown();
-void MenuSelect();
+static void MenuUp();
+static void MenuDown();
+static void MenuSelect();
+static void MenuBack();
 void UpdateMenu();
+void ShowHomeScreen();
 void MenuSetItem(char* displayName , void (*callback)(void) , int index =-1);
 
 };

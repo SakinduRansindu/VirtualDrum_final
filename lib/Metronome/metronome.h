@@ -27,6 +27,7 @@ void MetronomeUp();
 void MetronomeDown();
 static void Start();
 void Stop();
+static void Open();
 
 };
 

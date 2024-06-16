@@ -2,6 +2,7 @@
 #include <Adafruit_SSD1306.h>
 #include "menu.h"
 #include "metronome.h"
+#include "Handler.h"
 
 
 
@@ -9,11 +10,16 @@
 #define ACTIVATION_PIN 33
 #define ADC_RESOLUTION 12
 
- 
+#define WINDOW_MENU 0
+#define WINDOW_METRONOME 1
+
+short currentWindow = WINDOW_MENU;
+
 String command;
 Battery batt = Battery(3300, 4200, SENSE_PIN, ADC_RESOLUTION);
 Menu menu = Menu();
 Metronome metronome = Metronome();
+Handler handler = Handler();
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
   void item1Action();
@@ -21,6 +27,7 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
   void item3Action();
   void item4Action();
  void serialDebuger();
+ void test();
 
 void setup() {
 
@@ -33,8 +40,8 @@ void setup() {
   display.setTextColor(WHITE);
   display.setCursor(22,10);
   display.println("Group27");
-  display.setCursor(10,40);
-  display.println("METRONOME");
+  display.setCursor(30,40);
+  display.println("Drum");
   display.display();
   delay(2000);
 
@@ -47,10 +54,14 @@ void setup() {
   batt.begin(5000, 1, &asigmoidal);
 
   menu.MenuInit(&display);
-  menu.MenuSetItem("Metronome",&metronome.Start);
+  menu.MenuSetItem("Metronome",&metronome.Open);
   menu.MenuSetItem("Battery",&item2Action);
   menu.MenuSetItem("Reset",&item3Action);
   menu.MenuSetItem("Exit",&item4Action);
+
+  // Handler handler = Handler(test,test,test,test);
+  handler.setFucnctions(menu.MenuUp,menu.MenuDown,menu.MenuSelect, menu.MenuBack);
+
 
   metronome.MetronomeInit(&display);
 
@@ -116,6 +127,7 @@ void showBatteryLevel(){
 }
 
 void serialDebuger(){
+  bool isExecuted = true;
   if (Serial.available())
   {
     command = Serial.readStringUntil('\n');
@@ -126,22 +138,37 @@ void serialDebuger(){
   }
   else if (command == "u")
   {
-    menu.MenuUp();
-    menu.UpdateMenu();
+    // menu.MenuUp();
+    // menu.UpdateMenu();
+    handler.Up();
   }
     else if (command == "d")
   {
-    menu.MenuDown();
-    menu.UpdateMenu();
+    // menu.MenuDown();
+    // menu.UpdateMenu();
+    handler.Down();
   }
       else if (command == "s")
   {
-    menu.MenuSelect();
-    menu.UpdateMenu();
+    // menu.MenuSelect();
+    // menu.UpdateMenu();
+    handler.Select();
   }
-      else if (command == "refresh")
+    else if (command == "refresh")
   {
     menu.UpdateMenu();
   }
+  else
+  {
+    isExecuted = false;
+  }
+  if (isExecuted)
+  {
+    if(currentWindow == WINDOW_MENU){
+      menu.UpdateMenu();
+    }
+    
+  }
+  
   command = "";
 }
