@@ -29,6 +29,7 @@ Metronome::Metronome(){
 
 void Metronome::MetronomeInit(Adafruit_SSD1306 *d) {
    display = *d;
+   pinMode(LED_PIN, OUTPUT);
 // Serial.begin(9600);
   // use a for loop to initialize each pin as an output:
   // display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS);
