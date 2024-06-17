@@ -3,6 +3,7 @@
 #include "menu.h"
 #include "metronome.h"
 #include "Handler.h"
+#include "BatteryL.h"
 
 
 
@@ -17,6 +18,7 @@ Battery batt = Battery(3300, 4200, SENSE_PIN, ADC_RESOLUTION);
 Menu menu = Menu();
 Metronome metronome = Metronome();
 Handler handler = Handler();
+BatteryL batteryL = BatteryL(0,0);
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
   void item1Action();
@@ -38,8 +40,8 @@ void setup() {
   
   display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS);
 
- ShowHomeScreen();
- delay(2000);
+  ShowHomeScreen();
+  delay(2000);
 
   Serial.print("max volt: ");
   Serial.println(batt.level(4200));
@@ -48,6 +50,8 @@ void setup() {
   analogReadResolution(ADC_RESOLUTION);
   batt.onDemand(ACTIVATION_PIN, HIGH);
   batt.begin(5000, 1, &asigmoidal);
+
+  batteryL.BatteryInit(&display);
 
   menu.MenuInit(&display);
   menu.MenuSetItem("Metronome",&metronome.Open);
@@ -64,6 +68,7 @@ void setup() {
 void loop(){
     serialDebuger();
     metronome.UpdateMetronome();
+    batteryL.setBattery1Level(batt.level());
 }
 
 
@@ -235,6 +240,9 @@ void updateWindow(){
     }
     else if(handler.currentWindow == WINDOW_HOME){
       ShowHomeScreen();
+    }
+    else if(handler.currentWindow == WINDOW_BATTERY){
+      batteryL.UpdateDisplay();
     }
     else{
       handler.currentWindow = WINDOW_HOME;
