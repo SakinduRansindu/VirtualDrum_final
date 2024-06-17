@@ -12,6 +12,7 @@
 
 #define WINDOW_MENU 0
 #define WINDOW_METRONOME 1
+#define WINDOW_BATTERY 2
 
 short currentWindow = WINDOW_MENU;
 
@@ -28,6 +29,7 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
   void item4Action();
  void serialDebuger();
  void test();
+ void ShowHomeScreen();
 
 void setup() {
 
@@ -35,15 +37,8 @@ void setup() {
   
   display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS);
 
-  display.clearDisplay();
-  display.setTextSize(2);
-  display.setTextColor(WHITE);
-  display.setCursor(22,10);
-  display.println("Group27");
-  display.setCursor(30,40);
-  display.println("Drum");
-  display.display();
-  delay(2000);
+ ShowHomeScreen();
+ delay(2000);
 
   Serial.print("max volt: ");
   Serial.println(batt.level(4200));
@@ -57,7 +52,7 @@ void setup() {
   menu.MenuSetItem("Metronome",&metronome.Open);
   menu.MenuSetItem("Battery",&item2Action);
   menu.MenuSetItem("Reset",&item3Action);
-  menu.MenuSetItem("Exit",&item4Action);
+  menu.MenuSetItem("Exit",&ShowHomeScreen);
 
   // Handler handler = Handler(test,test,test,test);
   handler.setFucnctions(menu.MenuUp,menu.MenuDown,menu.MenuSelect, menu.MenuBack);
@@ -126,6 +121,17 @@ void showBatteryLevel(){
   Serial.println(batt.level());
 }
 
+void ShowHomeScreen(){
+  display.clearDisplay();
+  display.setTextSize(2);
+  display.setTextColor(WHITE);
+  display.setCursor(22,10);
+  display.println("Group27");
+  display.setCursor(30,40);
+  display.println("Drum");
+  display.display();
+}
+
 void serialDebuger(){
   bool isExecuted = true;
   if (Serial.available())
@@ -153,6 +159,7 @@ void serialDebuger(){
     // menu.MenuSelect();
     // menu.UpdateMenu();
     handler.Select();
+    
   }
     else if (command == "refresh")
   {

@@ -26,7 +26,7 @@ static void MenuDown();
 static void MenuSelect();
 static void MenuBack();
 void UpdateMenu();
-void ShowHomeScreen();
+int getSelectedIndex();
 void MenuSetItem(char* displayName , void (*callback)(void) , int index =-1);
 
 };

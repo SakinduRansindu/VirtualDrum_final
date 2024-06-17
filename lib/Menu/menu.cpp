@@ -128,6 +128,7 @@ void Menu::MenuUp(){
       Serial.println(selectedMenuIndex);
 }
 
+
 void Menu::MenuBack(){
   Serial.println("BACK");
 }
@@ -137,6 +138,10 @@ void Menu::MenuDown(){
     if (selectedMenuIndex >= menuLength) selectedMenuIndex = 0;
     Serial.print("DOWN");
     Serial.println(selectedMenuIndex);
+}
+
+int Menu::getSelectedIndex(){
+  return selectedMenuIndex;
 }
 
 void Menu::DebugData(){
