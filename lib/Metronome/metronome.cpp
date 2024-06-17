@@ -34,20 +34,17 @@ void Metronome::MetronomeInit(Adafruit_SSD1306 *d) {
 }
 
 bool isRunning = false;
-bool isOpened = false;
-void Metronome::Start(){
-  isRunning = true;
-}
-void Metronome::Stop(){
-  isRunning = false;
+void Metronome::Tougle(){
+  isRunning = !isRunning;
 }
 
 void Metronome::Open(){
-  isOpened = true;
+
 }
 
+
 void Metronome::UpdateMetronome() {
-  if(isOpened){
+  if(isRunning){
   interval = 60000000 / bpm;
   // Check if it's time to toggle the LED
   unsigned long currentMillis = micros();
@@ -58,10 +55,15 @@ void Metronome::UpdateMetronome() {
     ledState = !ledState;
     // Update the LED
     digitalWrite(LED_PIN, ledState);
+    if(ledState){
+    Serial.println("led on");
+    }
+    else{
+      Serial.println("led off");
+    }
   }
   
  //Serial.println(bpm);
- UpdateDisplay();
   }
  
 }

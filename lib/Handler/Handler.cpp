@@ -1,5 +1,7 @@
 #include "Handler.h"
 
+short Handler::currentWindow = WINDOW_HOME;
+
 Handler::Handler(){
     // Constructor
 }

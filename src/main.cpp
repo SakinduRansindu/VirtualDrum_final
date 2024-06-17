@@ -10,11 +10,7 @@
 #define ACTIVATION_PIN 33
 #define ADC_RESOLUTION 12
 
-#define WINDOW_MENU 0
-#define WINDOW_METRONOME 1
-#define WINDOW_BATTERY 2
 
-short currentWindow = WINDOW_MENU;
 
 String command;
 Battery batt = Battery(3300, 4200, SENSE_PIN, ADC_RESOLUTION);
@@ -28,8 +24,13 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
   void item3Action();
   void item4Action();
  void serialDebuger();
- void test();
+ void nullFunction();
  void ShowHomeScreen();
+ void goToWindow();
+ void backToWindow();
+ void updateWindow();
+ void changeBtnFunctionContex();
+ void printWindow();
 
 void setup() {
 
@@ -50,13 +51,11 @@ void setup() {
 
   menu.MenuInit(&display);
   menu.MenuSetItem("Metronome",&metronome.Open);
-  menu.MenuSetItem("Battery",&item2Action);
-  menu.MenuSetItem("Reset",&item3Action);
+  menu.MenuSetItem("Battery",&nullFunction);
+  menu.MenuSetItem("Reset",&esp_restart);
   menu.MenuSetItem("Exit",&ShowHomeScreen);
 
-  // Handler handler = Handler(test,test,test,test);
-  handler.setFucnctions(menu.MenuUp,menu.MenuDown,menu.MenuSelect, menu.MenuBack);
-
+  handler.setFucnctions(&nullFunction,&nullFunction,&nullFunction,&nullFunction);
 
   metronome.MetronomeInit(&display);
 
@@ -70,7 +69,7 @@ void loop(){
 
 
 
-void test(){
+void nullFunction(){
   Serial.println("function invoked");
 }
  
@@ -159,11 +158,11 @@ void serialDebuger(){
     // menu.MenuSelect();
     // menu.UpdateMenu();
     handler.Select();
-    
+    goToWindow();    
   }
-    else if (command == "refresh")
-  {
-    menu.UpdateMenu();
+  else if(command == "b"){
+    handler.Back();
+    backToWindow();
   }
   else
   {
@@ -171,11 +170,100 @@ void serialDebuger(){
   }
   if (isExecuted)
   {
-    if(currentWindow == WINDOW_MENU){
-      menu.UpdateMenu();
-    }
-    
+   updateWindow();
+   changeBtnFunctionContex();
   }
   
   command = "";
 }
+
+void backToWindow(){
+  switch (handler.currentWindow){
+    case WINDOW_MENU:
+      handler.currentWindow = WINDOW_HOME;
+      break;
+    case WINDOW_BATTERY:
+      handler.currentWindow = WINDOW_MENU;
+      break;
+    case WINDOW_METRONOME:
+      handler.currentWindow = WINDOW_MENU;
+      break;
+  }
+  printWindow();
+}
+
+void goToWindow(){
+  if(handler.currentWindow == WINDOW_MENU){
+    switch (menu.getSelectedIndex())
+      {
+      case 0:
+        handler.currentWindow = WINDOW_METRONOME;
+        break;
+
+      case 1:
+        handler.currentWindow = WINDOW_BATTERY;
+        break;
+
+      case 3:
+        handler.currentWindow = WINDOW_HOME;
+      
+      default:
+        handler.currentWindow = WINDOW_HOME;
+        break;
+      }
+  }
+  else if(handler.currentWindow == WINDOW_HOME){
+    handler.currentWindow = WINDOW_MENU;
+  }
+  else if(handler.currentWindow == WINDOW_BATTERY){
+    handler.currentWindow = WINDOW_MENU;
+  }
+  printWindow();
+}
+
+void printWindow(){
+      Serial.print("current window is ");
+    Serial.println(handler.currentWindow);
+}
+
+void updateWindow(){
+    if(handler.currentWindow == WINDOW_MENU){
+      menu.UpdateMenu();
+    }
+    else if(handler.currentWindow == WINDOW_METRONOME){
+      metronome.UpdateDisplay();
+    }
+    else if(handler.currentWindow == WINDOW_HOME){
+      ShowHomeScreen();
+    }
+    else{
+      handler.currentWindow = WINDOW_HOME;
+      ShowHomeScreen();
+    }
+}
+
+
+void changeBtnFunctionContex(){
+    switch (handler.currentWindow)
+    {
+    case WINDOW_MENU:
+      handler.setFucnctions(menu.MenuUp,menu.MenuDown,menu.MenuSelect, menu.MenuBack);
+      break;
+    
+    case WINDOW_HOME:
+      handler.setFucnctions(&nullFunction,&nullFunction,&nullFunction,&nullFunction);
+      break;
+
+    case WINDOW_BATTERY:
+      handler.setFucnctions(&nullFunction,&nullFunction,&nullFunction,&nullFunction);
+      break;
+
+    case WINDOW_METRONOME:
+      handler.setFucnctions(&metronome.MetronomeUp,&metronome.MetronomeDown,&metronome.Tougle,&nullFunction);
+      break;
+
+    default:
+      break;
+    }
+}
+

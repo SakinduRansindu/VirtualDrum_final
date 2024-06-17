@@ -1,6 +1,11 @@
 #ifndef HANDLER
 #define HANDLER
 
+#define WINDOW_HOME 0
+#define WINDOW_MENU 1
+#define WINDOW_METRONOME 2
+#define WINDOW_BATTERY 3
+
 class Handler{
 
     private:
@@ -21,7 +26,7 @@ class Handler{
         void set_SelectFunc(HandleOp selectFunc);
         void Back();
         void set_BackFunc(HandleOp backFunc);
-
+        static short currentWindow;
 };
 
 #endif

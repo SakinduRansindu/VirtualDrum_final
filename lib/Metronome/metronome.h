@@ -16,17 +16,16 @@ class Metronome{
 
 private:
   Adafruit_SSD1306 display;
-  void UpdateDisplay();
 
 
 public:
 Metronome();
+void UpdateDisplay();
 void MetronomeInit(Adafruit_SSD1306 *display);
 void UpdateMetronome();
-void MetronomeUp();
-void MetronomeDown();
-static void Start();
-void Stop();
+static void MetronomeUp();
+static void MetronomeDown();
+static void Tougle();
 static void Open();
 
 };
