@@ -20,7 +20,7 @@ BatteryL::BatteryL(int thisGloveBatteryNo ,int BatteryActivationPin){
     analogReadResolution(ADC_RESOLUTION);
     
     battery.onDemand(activationPin, HIGH);
-    battery.begin(4200, 1, &asigmoidal);
+    battery.begin(4200, 2, &asigmoidal);
 }
 
 void BatteryL::BatteryInit(Adafruit_SSD1306 *d) {
@@ -64,7 +64,7 @@ void BatteryL::setBattery2Level(int level){
 }   
 
 void BatteryL::measureBatteryLevel(){
-    if(millis() - lastBatteryCheck > 10000){
+    if(millis() - lastBatteryCheck > CHECK_INTERVAL){
       if(thisGlove == 0){
         battery1Level = battery.level();
       }
@@ -74,11 +74,8 @@ void BatteryL::measureBatteryLevel(){
       lastBatteryCheck = millis();
       Serial.print("Battery Level ");
       Serial.println(battery.level());
-      display.clearDisplay();
-      display.setCursor(0, 0);
-      display.println("B1:");
-      display.println(battery.level());
-      display.display();
+      Serial.print("Battery Voltage ");
+      Serial.println(battery.voltage());
     }
 }
 
