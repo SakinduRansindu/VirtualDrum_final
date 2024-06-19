@@ -4,21 +4,18 @@
 #include "metronome.h"
 #include "Handler.h"
 #include "BatteryL.h"
+#include "Piezo.h"
 
-
-
-#define SENSE_PIN 32
-#define ACTIVATION_PIN 33
-#define ADC_RESOLUTION 12
+#define GLOVE_NO 0
 
 
 
 String command;
-Battery batt = Battery(3300, 4200, SENSE_PIN, ADC_RESOLUTION);
 Menu menu = Menu();
 Metronome metronome = Metronome();
 Handler handler = Handler();
-BatteryL batteryL = BatteryL(0,0);
+BatteryL batteryL = BatteryL(GLOVE_NO,ACTIVATION_PIN);
+Piezo piezo = Piezo();
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
   void item1Action();
@@ -43,13 +40,6 @@ void setup() {
   ShowHomeScreen();
   delay(2000);
 
-  Serial.print("max volt: ");
-  Serial.println(batt.level(4200));
-  Serial.print("min volt: ");
-  Serial.println(batt.level(3300));
-  analogReadResolution(ADC_RESOLUTION);
-  batt.onDemand(ACTIVATION_PIN, HIGH);
-  batt.begin(5000, 1, &asigmoidal);
 
   batteryL.BatteryInit(&display);
 
@@ -68,7 +58,9 @@ void setup() {
 void loop(){
     serialDebuger();
     metronome.UpdateMetronome();
-    batteryL.setBattery1Level(batt.level());
+    // batteryL.setBattery1Level(batt.level());
+    batteryL.measureBatteryLevel();
+    piezo.loop();
 }
 
 
@@ -122,7 +114,7 @@ void item4Action() {
 void showBatteryLevel(){
   delay(1000);
   Serial.print("current battery level: ");
-  Serial.println(batt.level());
+  // Serial.println(batt.level());
 }
 
 void ShowHomeScreen(){
