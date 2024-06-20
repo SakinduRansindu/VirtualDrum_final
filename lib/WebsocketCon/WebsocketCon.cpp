@@ -29,20 +29,16 @@ void WebSocketCon::setup_websocket() {
 
 void WebSocketCon::setup()
 {
-
-  Serial.begin(115200);
-  Serial.println("\n");
-  startMillis = millis();  //initial start time
-  // Connect to WiFi
   WiFi.begin(ssid, password);
-
   Serial.print("Connecting to WiFi");
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
   }
   Serial.println("WiFi connected");
+
   setup_websocket();
+
   
 }
 
@@ -104,13 +100,16 @@ void WebSocketCon::sendMsg(String msg) {
 
 void WebSocketCon::loop()
 {
+      Serial.println("checkpoint0 in ws loop");
   webSocket.loop();
+      Serial.println("checkpoint1 in ws loop");
 
   if (webSocket.isConnected()) {  //   
 
     currentMillis = millis();
     if (currentMillis - startMillis >=  5000) {
       
+      Serial.println("checkpoint2 in ws loop");
       webSocket.sendTXT("play:drum2:10000");
 
       startMillis = currentMillis; 

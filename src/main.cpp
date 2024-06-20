@@ -3,9 +3,9 @@
 #include "menu.h"
 #include "metronome.h"
 #include "Handler.h"
+#include "WebsocketCon.h"
 #include "BatteryL.h"
 #include "Piezo.h"
-#include "WebsocketCon.h"
 
 #define GLOVE_NO 0
 
@@ -15,8 +15,8 @@ String command;
 Menu menu = Menu();
 Metronome metronome = Metronome();
 Handler handler = Handler();
-BatteryL batteryL = BatteryL(GLOVE_NO,ACTIVATION_PIN);
 WebSocketCon ws = WebSocketCon();
+BatteryL batteryL = BatteryL(GLOVE_NO,ACTIVATION_PIN);
 Piezo piezo = Piezo();
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
@@ -44,7 +44,7 @@ void setup() {
   delay(2000);
 
 
-  batteryL.BatteryInit(&display);
+  batteryL.BatteryInit(&display, &ws);
 
   menu.MenuInit(&display);
   menu.MenuSetItem("Metronome",&metronome.Open);
@@ -63,11 +63,11 @@ void loop(){
     metronome.UpdateMetronome();
     // batteryL.setBattery1Level(batt.level());
     batteryL.measureBatteryLevel();
-    Serial.println("battery loop done");
+    // Serial.println("battery loop done");
     piezo.loop();
-    Serial.println("piezo loop done");
+    // Serial.println("piezo loop done");
     ws.loop();
-    Serial.println("Ws loop done");
+    // Serial.println("Ws loop done");
 }
 
 
