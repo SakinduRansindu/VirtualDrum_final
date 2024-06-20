@@ -10,6 +10,8 @@ class BatteryL{
 
 private:
     Adafruit_SSD1306 display;
+    WebSocketCon wsCon; 
+    
     // Battery battery;
     int battery1Level;
     int battery2Level;
@@ -18,7 +20,7 @@ private:
 
 public:
     BatteryL(int thisGloveBatteryNo ,int activationPin);
-    void BatteryInit(Adafruit_SSD1306 *d);
+    void BatteryInit(Adafruit_SSD1306 *d, WebSocketCon* ws);
     void UpdateDisplay();
     void setBattery1Level(int level);
     void setBattery2Level(int level);

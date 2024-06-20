@@ -30,19 +30,9 @@ void WebSocketCon::setup_websocket() {
 void WebSocketCon::setup()
 {
 
-  Serial.begin(115200);
-  Serial.println("\n");
-  startMillis = millis();  //initial start time
-  // Connect to WiFi
-  WiFi.begin(ssid, password);
 
-  Serial.print("Connecting to WiFi");
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
-  }
-  Serial.println("WiFi connected");
   setup_websocket();
+
   
 }
 

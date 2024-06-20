@@ -1,6 +1,7 @@
 
 #include <Arduino.h>
 #include <Adafruit_SSD1306.h>
+#include "WebsocketCon.h"
 #include <Battery.h>
 #include "BatteryL.h"
 
@@ -18,13 +19,14 @@ BatteryL::BatteryL(int thisGloveBatteryNo ,int BatteryActivationPin){
     battery1Level = 0;
     battery2Level = 0;
     analogReadResolution(ADC_RESOLUTION);
-    
     battery.onDemand(activationPin, HIGH);
     battery.begin(4200, 2, &asigmoidal);
 }
 
-void BatteryL::BatteryInit(Adafruit_SSD1306 *d) {
+void BatteryL::BatteryInit(Adafruit_SSD1306 *d, WebSocketCon *ws) {
     display = *d;
+    wsCon = *ws;
+    
 }
 
 void BatteryL::UpdateDisplay() {
@@ -74,6 +76,9 @@ void BatteryL::measureBatteryLevel(){
       lastBatteryCheck = millis();
       Serial.print("Battery Level ");
       Serial.println(battery.level());
+
+      String s = "bat:" + String(thisGlove) + ":" + String(battery.level());
+      wsCon.sendMsg(s);
       Serial.print("Battery Voltage ");
       Serial.println(battery.voltage());
     }
