@@ -38,7 +38,7 @@ void setup() {
   Serial.begin(115200);
   
   display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS);
-  // ws.setup();
+  ws.setup();
 
   ShowHomeScreen();
   delay(2000);
@@ -63,8 +63,11 @@ void loop(){
     metronome.UpdateMetronome();
     // batteryL.setBattery1Level(batt.level());
     batteryL.measureBatteryLevel();
+    Serial.println("battery loop done");
     piezo.loop();
-    // ws.loop();
+    Serial.println("piezo loop done");
+    ws.loop();
+    Serial.println("Ws loop done");
 }
 
 
