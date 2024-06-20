@@ -95,21 +95,22 @@ void WebSocketCon::webSocketEvent(WStype_t type, uint8_t * payload, size_t lengt
 
 void WebSocketCon::sendMsg(String msg) {
   // send message to server
+  
   webSocket.sendTXT(msg);
 }
 
 void WebSocketCon::loop()
 {
-      Serial.println("checkpoint0 in ws loop");
+      // Serial.println("checkpoint0 in ws loop");
   webSocket.loop();
-      Serial.println("checkpoint1 in ws loop");
+      // Serial.println("checkpoint1 in ws loop");
 
   if (webSocket.isConnected()) {  //   
 
     currentMillis = millis();
     if (currentMillis - startMillis >=  5000) {
       
-      Serial.println("checkpoint2 in ws loop");
+      // Serial.println("checkpoint2 in ws loop");
       webSocket.sendTXT("play:drum2:10000");
 
       startMillis = currentMillis; 
