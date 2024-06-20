@@ -2,14 +2,20 @@
 #include <WiFiClientSecure.h>
 #include <WebSocketsClient.h>
 #include <WiFi.h>
-#include "WiFi_Pass.h"
+#include <WebSockets.h>
 #include "WebsocketCon.h"
+#include "WiFi_Pass.h"
 
 
 #define RECALIBRATE_BTN 12
 
 unsigned long startMillis;  //some global variables available anywhere in the program
 unsigned long currentMillis;
+WebSocketsClient  webSocket;
+
+WebSocketCon::WebSocketCon() {
+  // constructor
+}
 
 
 void WebSocketCon::setup_websocket() {
