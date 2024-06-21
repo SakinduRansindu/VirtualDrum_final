@@ -1,4 +1,4 @@
-const char* ssid = "Redmi";
-const char* password = "redda123";
-const char* server_ip = "192.168.47.105";
+const char* ssid = "<SSID>";
+const char* password = "<PASSWORD>";
+const char* server_ip = "SERVER_IP";
 const int server_port = 7075;
